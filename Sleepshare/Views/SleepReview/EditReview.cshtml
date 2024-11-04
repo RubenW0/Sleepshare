@@ -1,0 +1,49 @@
+﻿@model Sleepshare.Models.SleepReview
+
+@{
+    ViewBag.Title = "Edit Sleep Review";
+}
+
+<h2>Edit Sleep Review</h2>
+
+@using (Html.BeginForm("EditReview", "SleepReview", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Id) <!-- Zorg ervoor dat je het ID van de recensie doorgeeft -->
+
+    <div>
+        <label for="sleepRating">Sleep Rating:</label>
+        @Html.TextBoxFor(model => model.SleepRating)
+    </div>
+
+    <div>
+        <label for="description">Description:</label>
+        @Html.TextBoxFor(model => model.Description)
+    </div>
+
+    <div>
+        <label for="sleepGoal">Sleep Goal:</label>
+        @Html.TextBoxFor(model => model.SleepGoal)
+    </div>
+
+    <div>
+        <label for="sleepDuration">Sleep Duration:</label>
+        @Html.TextBoxFor(model => model.SleepDuration)
+    </div>
+
+    <div>
+        <label for="startTime">Start Time:</label>
+        @Html.TextBoxFor(model => model.StartTime, "{0:yyyy-MM-ddTHH:mm:ss}", new { @type = "datetime-local" })
+    </div>
+
+    <div>
+        <label for="endTime">End Time:</label>
+        @Html.TextBoxFor(model => model.EndTime, "{0:yyyy-MM-ddTHH:mm:ss}", new { @type = "datetime-local" })
+    </div>
+
+    <div>
+        <label for="date">Date:</label>
+        @Html.TextBoxFor(model => model.Date, "{0:yyyy-MM-dd}", new { @type = "date" })
+    </div>
+
+    <button type="submit">Update</button>
+}

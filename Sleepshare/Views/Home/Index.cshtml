@@ -1,0 +1,30 @@
+﻿@model List<Sleepshare.Models.SleepReview>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Sleep Feed</h1>
+
+    <div>
+        @foreach (var review in Model)
+        {
+            <div class="review-box" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                <p><strong>Reviewer:</strong> @review.Reviewer</p>
+                <p><strong>Sleep Rating:</strong> @review.SleepRating</p>
+                <p><strong>Description:</strong> @review.Description</p>
+                <p><strong>Sleep Goal:</strong> @review.SleepGoal</p>
+                <p><strong>Sleep Duration (minutes):</strong> @review.SleepDuration</p>
+                <p><strong>Start Time:</strong> @review.StartTime</p>
+                <p><strong>End Time:</strong> @review.EndTime</p>
+                <p><strong>Date:</strong> @review.Date</p>
+
+                <!-- Edit Button -->
+
+
+                @Html.ActionLink("Edit", "EditReview", "SleepReview", new { id = review.Id }, new { @class = "btn btn-primary" })
+            </div>
+        }
+    </div>
+</div>
