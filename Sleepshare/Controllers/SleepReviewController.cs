@@ -10,23 +10,23 @@ public class SleepReviewController : Controller
         _databaseService = new DatabaseConnection();
     }
 
-    // GET: SleepReview/EditReview/5
+    // GET Review
     public IActionResult EditReview(int id)
     {
         var sleepReview = _databaseService.GetSleepReviews().FirstOrDefault(r => r.Id == id);
         if (sleepReview == null)
         {
-            return NotFound(); // Return a 404 if the review is not found
+            return NotFound(); 
         }
-        return View(sleepReview); // Pass the specific review to the view
+        return View(sleepReview);
     }
 
+    // POST Review
     [HttpPost]
     public IActionResult EditReview(SleepReview sleepReview)
     {
-        if (ModelState.IsValid)
-        {
-            // Roep de update-methode aan en geef de juiste parameters door
+        //if (ModelState.IsValid)
+        //{
             bool isUpdated = _databaseService.UpdateSleepReview(
                 sleepReview.Id,
                 sleepReview.SleepRating,
@@ -40,12 +40,11 @@ public class SleepReviewController : Controller
 
             if (isUpdated)
             {
-                // Redirect naar de index of een andere actie na succesvol bijwerken
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
-        }
+        //}
 
-        return View(sleepReview); // Als het model niet geldig is, geef de view opnieuw weer met fouten
+        return View(sleepReview);
     }
 
 

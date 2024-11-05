@@ -67,7 +67,8 @@ public class DatabaseConnection
                         while (dataReader.Read())
                         {
                             SleepReview review = new SleepReview
-                            {
+                            {   
+                                Id = Convert.ToInt32(dataReader["id"]),
                                 Reviewer = dataReader["username"].ToString(),  // Vervang user_id door username
                                 SleepRating = Convert.ToInt32(dataReader["sleep_rating"]),
                                 Description = dataReader["description"].ToString(),
@@ -103,6 +104,7 @@ public class DatabaseConnection
         end_time = @end_time,
         date = @date
     WHERE id = @id";
+        int ID = id;
 
         using (MySqlConnection conn = new MySqlConnection($"SERVER={server};DATABASE={database};UID={uid};PASSWORD={password};"))
         {
