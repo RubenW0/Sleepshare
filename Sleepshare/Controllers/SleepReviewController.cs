@@ -1,48 +1,69 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLogicLayer.DTOs;
+using BusinessLogicLayer.Services;
+using DataAccessLayer;
+using DataAccessLayer.Repositorys;
+using Microsoft.AspNetCore.Mvc;
 using Sleepshare.Models;
 
 public class SleepReviewController : Controller
 {
-    private readonly DatabaseConnection _databaseService;
+    private readonly SleepReviewService _sleepReviewService;
 
-    public SleepReviewController()
+
+    public SleepReviewController(IConfiguration configuration)
     {
-        _databaseService = new DatabaseConnection();
+        _sleepReviewService = new SleepReviewService(new SleepReviewRepository(configuration));
     }
 
     // GET Review
     public IActionResult EditReview(int id)
     {
-        var sleepReview = _databaseService.GetSleepReviews().FirstOrDefault(r => r.Id == id);
-        if (sleepReview == null)
+        var sleepReviewDTO = _sleepReviewService.GetAllSleepReviews()
+            .FirstOrDefault(s => s.Id == id); // Find the review with the given id
+
+        if (sleepReviewDTO == null)
         {
-            return NotFound(); 
+            return NotFound();
         }
-        return View(sleepReview);
+
+        // Convert the DTO to the model for the view
+        var sleepReview = new Sleepshare.Models.SleepReview
+        {
+            Id = sleepReviewDTO.Id,
+            SleepRating = sleepReviewDTO.SleepRating,
+            Description = sleepReviewDTO.Description,
+            SleepGoal = sleepReviewDTO.SleepGoal,
+            SleepDuration = sleepReviewDTO.SleepDuration,
+            StartTime = sleepReviewDTO.StartTime,
+            EndTime = sleepReviewDTO.EndTime,
+            Date = sleepReviewDTO.Date
+        };
+
+        return View(sleepReview); // Pass the single review model to the view
     }
 
     // POST Review
     [HttpPost]
     public IActionResult EditReview(SleepReview sleepReview)
     {
-        //if (ModelState.IsValid)
-        //{
-            bool isUpdated = _databaseService.UpdateSleepReview(
-                sleepReview.Id,
-                sleepReview.SleepRating,
-                sleepReview.Description,
-                sleepReview.SleepGoal,
-                sleepReview.SleepDuration,
-                sleepReview.StartTime,
-                sleepReview.EndTime,
-                sleepReview.Date
-            );
-
+        if (ModelState.IsValid)
+        {
+            bool isUpdated = _sleepReviewService.UpdateReview(new SleepReviewDTO
+            {
+                Id = sleepReview.Id,
+                SleepRating = sleepReview.SleepRating,
+                Description = sleepReview.Description,
+                SleepGoal = sleepReview.SleepGoal,
+                SleepDuration = sleepReview.SleepDuration,
+                StartTime = sleepReview.StartTime,
+                EndTime = sleepReview.EndTime,
+                Date = sleepReview.Date
+            });
             if (isUpdated)
             {
                 return RedirectToAction("Index", "Home");
             }
-        //}
+        }
 
         return View(sleepReview);
     }

@@ -1,3 +1,6 @@
+using BusinessLogicLayer.Services;
+using DataAccessLayer;
+using DataAccessLayer.Repositorys;
 using Microsoft.AspNetCore.Mvc;
 using Sleepshare.Models;
 using System.Diagnostics;
@@ -6,20 +9,30 @@ namespace Sleepshare.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly DatabaseConnection _databaseService;
+        private readonly SleepReviewService _sleepReviewService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IConfiguration configuration)
         {
-            _logger = logger;
-            _databaseService = new DatabaseConnection();
+            _sleepReviewService = new SleepReviewService(new SleepReviewRepository(configuration));
         }
 
         public IActionResult Index()
         {
-            // Get the sleep reviews from the database
-            var sleepReviews = _databaseService.GetSleepReviews();
-            return View(sleepReviews); // Pass them to the view
+            var sleepReviewDTOs = _sleepReviewService.GetAllSleepReviews();
+            var sleepReviews = sleepReviewDTOs.Select(dto => new Sleepshare.Models.SleepReview
+            {
+                Id = dto.Id,
+                Reviewer = dto.Reviewer,  // assuming Reviewer exists in your DTO, or map appropriately
+                SleepRating = dto.SleepRating,
+                Description = dto.Description,
+                SleepGoal = dto.SleepGoal,
+                SleepDuration = dto.SleepDuration,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Date = dto.Date
+            }).ToList();
+
+            return View(sleepReviews);  // Pass the converted list of SleepReview models
         }
 
         public IActionResult Privacy()

@@ -8,7 +8,7 @@
 
 @using (Html.BeginForm("EditReview", "SleepReview", FormMethod.Post))
 {
-    @Html.HiddenFor(model => model.Id) <!-- Zorg ervoor dat je het ID van de recensie doorgeeft -->
+    @Html.HiddenFor(model => model.Id)
 
     <div>
         <label for="sleepRating">Sleep Rating:</label>
