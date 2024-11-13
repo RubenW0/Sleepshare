@@ -19,14 +19,14 @@ public class SleepReviewController : Controller
     public IActionResult EditReview(int id)
     {
         var sleepReviewDTO = _sleepReviewService.GetAllSleepReviews()
-            .FirstOrDefault(s => s.Id == id); // Find the review with the given id
+            .FirstOrDefault(s => s.Id == id); 
 
         if (sleepReviewDTO == null)
         {
             return NotFound();
         }
 
-        // Convert the DTO to the model for the view
+        // Convert DTO to SleepReviewModel
         var sleepReview = new Sleepshare.Models.SleepReview
         {
             Id = sleepReviewDTO.Id,
@@ -39,15 +39,15 @@ public class SleepReviewController : Controller
             Date = sleepReviewDTO.Date
         };
 
-        return View(sleepReview); // Pass the single review model to the view
+        return View(sleepReview); 
     }
 
     // POST Review
     [HttpPost]
     public IActionResult EditReview(SleepReview sleepReview)
     {
-        if (ModelState.IsValid)
-        {
+        //if (ModelState.IsValid)
+        //{
             bool isUpdated = _sleepReviewService.UpdateReview(new SleepReviewDTO
             {
                 Id = sleepReview.Id,
@@ -63,7 +63,7 @@ public class SleepReviewController : Controller
             {
                 return RedirectToAction("Index", "Home");
             }
-        }
+       //}
 
         return View(sleepReview);
     }

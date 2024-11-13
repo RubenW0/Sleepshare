@@ -16,9 +16,6 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<ISleepReviewRepository, SleepReviewRepository>();
 
 
-//// Voeg services toe aan de DI-container.
-//builder.Services.AddSingleton<ISleepReviewRepository, SleepReviewRepository>(); // Registratie van de repository
-//builder.Services.AddSingleton<SleepReviewService>(); // Registratie van de service
 
 var configuration =  new ConfigurationBuilder()
         .AddJsonFile("appsettings.json")

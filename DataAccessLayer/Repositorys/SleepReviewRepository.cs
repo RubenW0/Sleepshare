@@ -48,7 +48,7 @@ namespace DataAccessLayer.Repositorys
                                     SleepDuration = Convert.ToInt32(dataReader["sleep_duration"]),
                                     StartTime = Convert.ToDateTime(dataReader["start_time"]),
                                     EndTime = Convert.ToDateTime(dataReader["end_time"]),
-                                    Date = Convert.ToDateTime(dataReader["date"])
+                                    Date = Convert.ToDateTime(dataReader["date"]).Date
                                 };
                                 sleepReviews.Add(review);
                             }
