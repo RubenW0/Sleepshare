@@ -4,6 +4,7 @@ using DataAccessLayer.Repositorys;
 using Microsoft.AspNetCore.Mvc;
 using Sleepshare.Models;
 using System.Diagnostics;
+using PresentationLayer.Helpers;
 
 namespace Sleepshare.Controllers
 {
@@ -19,20 +20,12 @@ namespace Sleepshare.Controllers
         public IActionResult Index()
         {
             var sleepReviewDTOs = _sleepReviewService.GetAllSleepReviews();
-            var sleepReviews = sleepReviewDTOs.Select(dto => new Sleepshare.Models.SleepReview
-            {
-                Id = dto.Id,
-                Reviewer = dto.Reviewer,  // assuming Reviewer exists in your DTO, or map appropriately
-                SleepRating = dto.SleepRating,
-                Description = dto.Description,
-                SleepGoal = dto.SleepGoal,
-                SleepDuration = dto.SleepDuration,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime,
-                Date = dto.Date
-            }).ToList();
 
-            return View(sleepReviews);  // Pass the converted list of SleepReview models
+            var sleepReviews = sleepReviewDTOs
+                .Select(SleepReviewMapper.ToModel)
+                .ToList();
+
+            return View(sleepReviews);
         }
 
         public IActionResult Privacy()

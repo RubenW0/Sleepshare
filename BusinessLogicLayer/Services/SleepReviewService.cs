@@ -28,5 +28,10 @@ namespace BusinessLogicLayer.Services
         {
             return _sleepReviewRepository.UpdateSleepReview(review);
         }
+
+        public bool AddSleepReview(SleepReviewDTO review)
+        {
+            return _sleepReviewRepository.AddSleepReview(review);
+        }
     }
 }

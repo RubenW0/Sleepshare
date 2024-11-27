@@ -14,6 +14,7 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 // Configureer andere services (bijv. repositories)
 builder.Services.AddScoped<ISleepReviewRepository, SleepReviewRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 

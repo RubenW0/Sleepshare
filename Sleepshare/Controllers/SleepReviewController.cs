@@ -3,6 +3,7 @@ using BusinessLogicLayer.Services;
 using DataAccessLayer;
 using DataAccessLayer.Repositorys;
 using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.Helpers;
 using Sleepshare.Models;
 
 public class SleepReviewController : Controller
@@ -27,17 +28,7 @@ public class SleepReviewController : Controller
         }
 
         // Convert DTO to SleepReviewModel
-        var sleepReview = new Sleepshare.Models.SleepReview
-        {
-            Id = sleepReviewDTO.Id,
-            SleepRating = sleepReviewDTO.SleepRating,
-            Description = sleepReviewDTO.Description,
-            SleepGoal = sleepReviewDTO.SleepGoal,
-            SleepDuration = sleepReviewDTO.SleepDuration,
-            StartTime = sleepReviewDTO.StartTime,
-            EndTime = sleepReviewDTO.EndTime,
-            Date = sleepReviewDTO.Date
-        };
+        var sleepReview = SleepReviewMapper.ToModel(sleepReviewDTO);
 
         return View(sleepReview); 
     }
@@ -48,25 +39,47 @@ public class SleepReviewController : Controller
     {
         //if (ModelState.IsValid)
         //{
-            bool isUpdated = _sleepReviewService.UpdateReview(new SleepReviewDTO
-            {
-                Id = sleepReview.Id,
-                SleepRating = sleepReview.SleepRating,
-                Description = sleepReview.Description,
-                SleepGoal = sleepReview.SleepGoal,
-                SleepDuration = sleepReview.SleepDuration,
-                StartTime = sleepReview.StartTime,
-                EndTime = sleepReview.EndTime,
-                Date = sleepReview.Date
-            });
-            if (isUpdated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-       //}
+        // Gebruik SleepReviewMapper om het model om te zetten naar een DTO
+        var sleepReviewDTO = SleepReviewMapper.ToDTO(sleepReview);
+
+        bool isUpdated = _sleepReviewService.UpdateReview(sleepReviewDTO);
+
+        if (isUpdated)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        //}
 
         return View(sleepReview);
     }
 
+    // GET: SleepReview/AddReview
+    public IActionResult AddReview()
+    {
+        return View("AddReview");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult AddSleepReview(SleepReview sleepReview)
+    {
+        //if (ModelState.IsValid)
+        {
+            var sleepReviewDTO = SleepReviewMapper.ToDTO(sleepReview);
+
+            bool isAdded = _sleepReviewService.AddSleepReview(sleepReviewDTO);
+
+            if (isAdded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError("", "An error occurred while adding the sleep review.");
+            }
+        }
+
+        return View(sleepReview);
+    }
 
 }

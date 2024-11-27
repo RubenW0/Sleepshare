@@ -1,16 +1,10 @@
-﻿@model List<Sleepshare.Models.SleepReview>
-
-@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
+﻿<div class="text-center">
     <h1 class="display-4">Sleep Feed</h1>
 
     <div>
         @foreach (var review in Model)
         {
-            <div class="review-box" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <div class="review-box" style="border: 3px solid #ccc; padding: 10px; margin-bottom: 10px; text-align: left;">
                 <p><strong>Reviewer:</strong> @review.Reviewer</p>
                 <p><strong>Sleep Rating:</strong> @review.SleepRating</p>
                 <p><strong>Description:</strong> @review.Description</p>
@@ -21,8 +15,6 @@
                 <p><strong>Date:</strong> @review.Date.ToString("yyyy-MM-dd")</p>
 
                 <!-- Edit Button -->
-
-
                 @Html.ActionLink("Edit", "EditReview", "SleepReview", new { id = review.Id }, new { @class = "btn btn-primary" })
             </div>
         }

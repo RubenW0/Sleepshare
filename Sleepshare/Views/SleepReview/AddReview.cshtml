@@ -1,0 +1,55 @@
+﻿@model Sleepshare.Models.SleepReview
+
+@{
+    ViewData["Title"] = "Add Sleep Review";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-action="AddSleepReview" asp-controller="SleepReview">
+    @Html.AntiForgeryToken()
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="form-group">
+        <label for="SleepRating">Sleep Rating</label>
+        <input type="number" class="form-control" id="SleepRating" name="SleepRating" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea class="form-control" id="Description" name="Description" rows="4" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="SleepGoal">Sleep Goal</label>
+        <input type="number" class="form-control" id="SleepGoal" name="SleepGoal" required />
+    </div>
+
+    <div class="form-group">
+        <label for="SleepDuration">Sleep Duration (in minutes)</label>
+        <input type="number" class="form-control" id="SleepDuration" name="SleepDuration" required />
+    </div>
+
+    <div class="form-group">
+        <label for="StartTime">Start Time</label>
+        <input type="datetime-local" class="form-control" id="StartTime" name="StartTime" required />
+    </div>
+
+    <div class="form-group">
+        <label for="EndTime">End Time</label>
+        <input type="datetime-local" class="form-control" id="EndTime" name="EndTime" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Date">Date</label>
+        <input type="date" class="form-control" id="Date" name="Date" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Sleep Review</button>
+</form>

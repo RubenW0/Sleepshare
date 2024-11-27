@@ -11,10 +11,8 @@ namespace DataAccessLayer.Repositorys
     {
         private readonly string _connectionString;
 
-        // Constructor met Dependency Injection van IConfiguration
         public SleepReviewRepository(IConfiguration configuration)
         {
-            // Haal de verbindingstring uit de configuratie
             _connectionString = configuration.GetConnectionString("MySqlConnection");
         }
 
@@ -109,6 +107,45 @@ namespace DataAccessLayer.Repositorys
             {
                 dbConn.Close();
             }
+
+
         }
+
+        public bool AddSleepReview(SleepReviewDTO review)
+{
+    string query = @"INSERT INTO sleep_reviews (user_id, sleep_rating, description, sleep_goal,
+                                                sleep_duration, start_time, end_time, date)
+                     VALUES (@user_id, @sleep_rating, @description, @sleep_goal, 
+                             @sleep_duration, @start_time, @end_time, @date)";
+
+    using (var dbConn = new MySqlConnection(_connectionString))
+    {
+        try
+        {
+            dbConn.Open();
+            using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+            {
+                cmd.Parameters.AddWithValue("@user_id", review.UserId); 
+                cmd.Parameters.AddWithValue("@sleep_rating", review.SleepRating);
+                cmd.Parameters.AddWithValue("@description", review.Description);
+                cmd.Parameters.AddWithValue("@sleep_goal", review.SleepGoal);
+                cmd.Parameters.AddWithValue("@sleep_duration", review.SleepDuration);
+                cmd.Parameters.AddWithValue("@start_time", review.StartTime);
+                cmd.Parameters.AddWithValue("@end_time", review.EndTime);
+                cmd.Parameters.AddWithValue("@date", review.Date);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while adding the sleep review.", ex);
+        }
+        finally
+        {
+            dbConn.Close();
+        }
+    }
+}
     }
 }
