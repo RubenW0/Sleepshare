@@ -15,12 +15,12 @@ namespace PresentationLayer.Controllers
             _userService = new UserService(new UserRepository(configuration));
         }
 
-        // GET: /Account/Login
+
         [HttpGet]
         public IActionResult Index()
         {
-            var model = new LoginViewModel(); // Ensure the model is not null
-            return View(model); // Pass the model to the view
+            var model = new LoginViewModel();
+            return View(model);
         }
 
         [HttpPost]
@@ -28,25 +28,67 @@ namespace PresentationLayer.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Attempt to find the user with the provided credentials
                 var foundUser = _userService.Login(model.Username, model.Password);
 
                 if (foundUser != null)
                 {
-                    // User found, redirect to the home page or user dashboard
-                    return RedirectToAction("Index", "Home");
+                    HttpContext.Session.SetString("Username", foundUser.Username);
+                    return RedirectToAction("Profile", "Login"); 
                 }
                 else
                 {
-                    // Invalid credentials, add an error to the ModelState
-                    ModelState.AddModelError("", "Invalid username or password.");
+                    ModelState.AddModelError("", "Invalid username or password."); 
                 }
             }
 
-            // If we reach here, something went wrong. Return the same model back to the view
+            return View("Index", model); 
+        }
+
+
+        [HttpGet]
+        public IActionResult Account()
+        {
+            // Check if the user is logged in by checking for a session value
+            var username = HttpContext.Session.GetString("Username");
+
+            if (string.IsNullOrEmpty(username))
+            {
+                // If not logged in, redirect to the login page
+                return RedirectToAction("Login");
+            }
+
+            // If logged in, redirect to the Profile page
+            return RedirectToAction("Profile");
+        }
+
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            // Retrieve the username from the session
+            var username = HttpContext.Session.GetString("Username");
+
+            if (string.IsNullOrEmpty(username))
+            {
+                // If the session is empty (user not logged in), redirect to the login page
+                return RedirectToAction("Login");
+            }
+
+            // Pass the username to the profile view
+            var model = new ProfileViewModel
+            {
+                Username = username
+            };
+
             return View(model);
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // Clear all session data
+            return RedirectToAction("Index", "Login"); // Redirect to login page
+        }
     }
 }
