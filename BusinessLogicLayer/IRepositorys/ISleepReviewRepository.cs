@@ -11,5 +11,7 @@ namespace BusinessLogicLayer.IRepositorys
         List<SleepReviewDTO> GetSleepReviews();
         bool UpdateSleepReview(SleepReviewDTO review);
         bool AddSleepReview(SleepReviewDTO review);
+        List<SleepReviewDTO> GetSleepReviewsByUserId(int userId);
+
     }
 }

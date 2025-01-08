@@ -4,6 +4,7 @@ using DataAccessLayer;
 using DataAccessLayer.Repositorys;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Helpers;
+using PresentationLayer.Models;
 using Sleepshare.Models;
 
 public class SleepReviewController : Controller
@@ -11,12 +12,11 @@ public class SleepReviewController : Controller
     private readonly SleepReviewService _sleepReviewService;
 
 
-    public SleepReviewController(IConfiguration configuration)
+    public SleepReviewController(IConfiguration configuration)  
     {
         _sleepReviewService = new SleepReviewService(new SleepReviewRepository(configuration));
     }
 
-    // GET Review
     public IActionResult EditReview(int id)
     {
         var sleepReviewDTO = _sleepReviewService.GetAllSleepReviews()
@@ -27,13 +27,11 @@ public class SleepReviewController : Controller
             return NotFound();
         }
 
-        // Convert DTO to SleepReviewModel
         var sleepReview = SleepReviewMapper.ToModel(sleepReviewDTO);
 
         return View(sleepReview); 
     }
 
-    // POST Review
     [HttpPost]
     public IActionResult EditReview(SleepReview sleepReview)
     {
@@ -53,7 +51,6 @@ public class SleepReviewController : Controller
         return View(sleepReview);
     }
 
-    // GET: SleepReview/AddReview
     public IActionResult AddReview()
     {
         return View("AddReview");
@@ -80,6 +77,32 @@ public class SleepReviewController : Controller
         }
 
         return View(sleepReview);
+    }
+
+    public IActionResult ShowTimeline()
+    {
+
+        var userId = HttpContext.Session.GetInt32("UserId");
+
+
+        if (userId == null)
+        {
+            return RedirectToAction("Login", "Login");
+        }
+
+        var sleepReviewDTOs = _sleepReviewService.GetSleepReviewsByUserId(userId.Value);
+
+        var sleepReviews = sleepReviewDTOs
+            .Select(SleepReviewMapper.ToModel)
+            .ToList();
+
+        var model = new ProfileViewModel
+        {
+            Username = HttpContext.Session.GetString("Username"),
+            SleepReviews = sleepReviews
+        };
+
+        return View("Profile", model);
     }
 
 }

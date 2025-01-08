@@ -33,6 +33,7 @@ namespace PresentationLayer.Controllers
                 if (foundUser != null)
                 {
                     HttpContext.Session.SetString("Username", foundUser.Username);
+                    HttpContext.Session.SetInt32("UserId", foundUser.Id);
                     return RedirectToAction("Profile", "Login"); 
                 }
                 else
@@ -45,35 +46,31 @@ namespace PresentationLayer.Controllers
         }
 
 
+
         [HttpGet]
         public IActionResult Account()
         {
-            // Check if the user is logged in by checking for a session value
+
             var username = HttpContext.Session.GetString("Username");
 
             if (string.IsNullOrEmpty(username))
             {
-                // If not logged in, redirect to the login page
                 return RedirectToAction("Login");
             }
 
-            // If logged in, redirect to the Profile page
             return RedirectToAction("Profile");
         }
 
         [HttpGet]
         public IActionResult Profile()
         {
-            // Retrieve the username from the session
             var username = HttpContext.Session.GetString("Username");
 
             if (string.IsNullOrEmpty(username))
             {
-                // If the session is empty (user not logged in), redirect to the login page
                 return RedirectToAction("Login");
             }
 
-            // Pass the username to the profile view
             var model = new ProfileViewModel
             {
                 Username = username
@@ -87,8 +84,8 @@ namespace PresentationLayer.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear(); // Clear all session data
-            return RedirectToAction("Index", "Login"); // Redirect to login page
+            HttpContext.Session.Clear(); 
+            return RedirectToAction("Index", "Login");
         }
     }
 }

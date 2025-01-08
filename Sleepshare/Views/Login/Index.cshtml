@@ -4,7 +4,6 @@
     ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
 
 @if (!ViewData.ModelState.IsValid)
 {
@@ -21,13 +20,13 @@
     <div class="form-group">
         <label for="Username">Username</label>
         <input type="text" id="Username" name="Username" class="form-control" value="@Model.Username" required />
-        @Html.ValidationMessageFor(m => m.Username) <!-- Display validation message for Username -->
+        @Html.ValidationMessageFor(m => m.Username) 
     </div>
 
     <div class="form-group">
         <label for="Password">Password</label>
         <input type="password" id="Password" name="Password" class="form-control" required />
-        @Html.ValidationMessageFor(m => m.Password) <!-- Display validation message for Password -->
+        @Html.ValidationMessageFor(m => m.Password) 
     </div>
 
     <div class="form-group">

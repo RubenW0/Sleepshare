@@ -23,6 +23,10 @@ namespace BusinessLogicLayer.Services
             return _sleepReviewRepository.GetSleepReviews();
         }
 
+        public List<SleepReviewDTO> GetSleepReviewsByUserId(int userId)
+        {
+            return _sleepReviewRepository.GetSleepReviewsByUserId(userId);
+        }
 
         public bool UpdateReview(SleepReviewDTO review)
         {
@@ -33,5 +37,7 @@ namespace BusinessLogicLayer.Services
         {
             return _sleepReviewRepository.AddSleepReview(review);
         }
+
+
     }
 }

@@ -28,6 +28,7 @@ namespace Sleepshare.Controllers
             return View(sleepReviews);
         }
 
+
         public IActionResult Privacy()
         {
             return View();

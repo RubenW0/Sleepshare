@@ -15,6 +15,13 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<ISleepReviewRepository, SleepReviewRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+// configureer services
+//builder.Services.AddSingleton<AppConfiguration>();
+//builder.Services.AddScoped<ISleepReviewRepository, SleepReviewRepository>();
+//builder.Services.AddScoped<SleepReviewService, SleepReviewService>();
+
+
+
 var configuration = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json")
         .Build();

@@ -2,4 +2,36 @@
 
 <h1>Welcome to Your Profile</h1>
 <p>Your username: @Model.Username</p>
-<
+
+<h2>Your Sleep Reviews</h2>
+
+@if (Model.SleepReviews != null && Model.SleepReviews.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Sleep Rating</th>
+                <th>Description</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model.SleepReviews)
+            {
+                <tr>
+                    <td>@review.SleepRating</td>
+                    <td>@review.Description</td>
+                    <td>@review.StartTime.ToString("MM/dd/yyyy HH:mm")</td>
+                    <td>@review.EndTime.ToString("MM/dd/yyyy HH:mm")</td>
+                    <td>@review.SleepDuration</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No sleep reviews found.</p>
+}
