@@ -34,7 +34,9 @@
     </div>
 </form>
 
-<p>Don't have an account? <a href="/Account/Register">Register here</a></p>
+<p>Don't have an account? 
+<a asp-action="Register" asp-controller="Login">Register here</a>
+
 
 @if (ViewData["ErrorMessage"] != null)
 {

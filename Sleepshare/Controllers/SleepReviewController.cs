@@ -98,7 +98,7 @@ public class SleepReviewController : Controller
     {
         try
         {
-            bool isDeleted = _sleepReviewService.DeleteSleepReview(id); // Or call the repository directly if no service is used
+            bool isDeleted = _sleepReviewService.DeleteSleepReview(id); 
 
             if (isDeleted)
             {

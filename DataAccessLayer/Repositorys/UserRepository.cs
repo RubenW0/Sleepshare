@@ -28,7 +28,7 @@ namespace DataAccessLayer.Repositorys
                     using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
                     {
                         cmd.Parameters.AddWithValue("@username", username);
-                        cmd.Parameters.AddWithValue("@password", password);  // In a real application, hash passwords!
+                        cmd.Parameters.AddWithValue("@password", password);  
 
                         using (MySqlDataReader dataReader = cmd.ExecuteReader())
                         {
@@ -38,10 +38,10 @@ namespace DataAccessLayer.Repositorys
                                 {
                                     Id = Convert.ToInt32(dataReader["id"]),
                                     Username = dataReader["username"].ToString(),
-                                    Password = dataReader["password"].ToString()  // Again, hash password comparison needed
+                                    Password = dataReader["password"].ToString()  
                                 };
                             }
-                            return null; // No user found
+                            return null; 
                         }
                     }
                 }
@@ -55,5 +55,64 @@ namespace DataAccessLayer.Repositorys
                 }
             }
         }
+
+        public bool AddUser(string username, string password)
+        {
+            string query = @"INSERT INTO users (username, password) VALUES (@username, @password)";
+
+            using (var dbConn = new MySqlConnection(_connectionString))
+            {
+                try
+                {
+                    dbConn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+                        cmd.Parameters.AddWithValue("@password", password); 
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred while adding the user.", ex);
+                }
+                finally
+                {
+                    dbConn.Close();
+                }
+            }
+        }
+
+        public bool UserExists(string username)
+        {
+            string query = @"SELECT COUNT(*) FROM users WHERE username = @username";
+
+            using (var dbConn = new MySqlConnection(_connectionString))
+            {
+                try
+                {
+                    dbConn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count > 0; 
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred while checking if the user exists.", ex);
+                }
+                finally
+                {
+                    dbConn.Close();
+                }
+            }
+        }
+
+
     }
 }

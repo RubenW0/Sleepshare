@@ -91,5 +91,41 @@ namespace PresentationLayer.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Register()
+        {
+            var model = new RegisterViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Password != model.ConfirmPassword)
+                {
+                    ModelState.AddModelError("", "Passwords do not match.");
+                    return View(model);
+                }
+
+                var isRegistered = _userService.Register(model.Username, model.Password);
+
+                if (isRegistered)
+                {
+                    TempData["SuccessMessage"] = "Registration successful! You can now log in.";
+                    return RedirectToAction("Index", "Login");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Username is already taken.");
+                }
+            }
+
+            return View(model);
+        }
+
+
     }
 }

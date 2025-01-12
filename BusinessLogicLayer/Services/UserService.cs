@@ -17,5 +17,16 @@ namespace BusinessLogicLayer.Services
             return _userRepository.GetUser (username, password);
         }
 
+        public bool Register(string username, string password)
+        {
+            if (_userRepository.UserExists(username))
+            {
+                return false; 
+            }
+
+            return _userRepository.AddUser(username, password);
+        }
+
+
     }
 }
