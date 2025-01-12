@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Services;
 using DataAccessLayer;
 using DataAccessLayer.Repositorys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.Helpers;
 using PresentationLayer.Models;
@@ -44,15 +45,23 @@ public class SleepReviewController : Controller
 
         if (isUpdated)
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Profile", "Login");
         }
         //}
 
         return View(sleepReview);
     }
 
+    [HttpGet]
     public IActionResult AddReview()
     {
+        var userId = HttpContext.Session.GetInt32("UserId");
+
+        if (userId == null)
+        {
+            return View("NotLoggedIn");
+        }
+
         return View("AddReview");
     }
 
@@ -60,30 +69,60 @@ public class SleepReviewController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult AddSleepReview(SleepReview sleepReview)
     {
-        //if (ModelState.IsValid)
+        var userId = HttpContext.Session.GetInt32("UserId");
+
+        if (userId == null)
         {
-            var sleepReviewDTO = SleepReviewMapper.ToDTO(sleepReview);
+            return RedirectToAction("Index", "Login");
+        }
+        sleepReview.UserId = userId.Value;
 
-            bool isAdded = _sleepReviewService.AddSleepReview(sleepReviewDTO);
+        var sleepReviewDTO = SleepReviewMapper.ToDTO(sleepReview);
 
-            if (isAdded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ModelState.AddModelError("", "An error occurred while adding the sleep review.");
-            }
+        bool isAdded = _sleepReviewService.AddSleepReview(sleepReviewDTO);
+
+        if (isAdded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        else
+        {
+            ModelState.AddModelError("", "An error occurred while adding the sleep review.");
         }
 
         return View(sleepReview);
     }
 
-    public IActionResult ShowTimeline()
+    [HttpPost]
+    public IActionResult DeleteReview(int id)
     {
+        try
+        {
+            bool isDeleted = _sleepReviewService.DeleteSleepReview(id); // Or call the repository directly if no service is used
 
+            if (isDeleted)
+            {
+                TempData["SuccessMessage"] = "Sleep review deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete the sleep review.";
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+        }
+
+        return RedirectToAction("Profile", "Login"); 
+    }
+
+    //
+    [HttpGet]
+    [Route("Login/Profile")]
+    public IActionResult UserSleepReview()
+    {
         var userId = HttpContext.Session.GetInt32("UserId");
-
 
         if (userId == null)
         {
@@ -102,7 +141,10 @@ public class SleepReviewController : Controller
             SleepReviews = sleepReviews
         };
 
-        return View("Profile", model);
+        return View("~/Views/Login/Profile.cshtml", model);
+
     }
+
+
 
 }

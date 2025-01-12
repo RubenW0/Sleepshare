@@ -13,5 +13,7 @@ namespace BusinessLogicLayer.IRepositorys
         bool AddSleepReview(SleepReviewDTO review);
         List<SleepReviewDTO> GetSleepReviewsByUserId(int userId);
 
+        bool DeleteSleepReview(int reviewId);
+
     }
 }

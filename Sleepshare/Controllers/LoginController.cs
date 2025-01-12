@@ -15,7 +15,6 @@ namespace PresentationLayer.Controllers
             _userService = new UserService(new UserRepository(configuration));
         }
 
-
         [HttpGet]
         public IActionResult Index()
         {
@@ -34,6 +33,7 @@ namespace PresentationLayer.Controllers
                 {
                     HttpContext.Session.SetString("Username", foundUser.Username);
                     HttpContext.Session.SetInt32("UserId", foundUser.Id);
+
                     return RedirectToAction("Profile", "Login"); 
                 }
                 else
@@ -44,8 +44,6 @@ namespace PresentationLayer.Controllers
 
             return View("Index", model); 
         }
-
-
 
         [HttpGet]
         public IActionResult Account()
@@ -79,7 +77,6 @@ namespace PresentationLayer.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
@@ -87,5 +84,12 @@ namespace PresentationLayer.Controllers
             HttpContext.Session.Clear(); 
             return RedirectToAction("Index", "Login");
         }
+
+        [HttpGet]
+        public IActionResult NotLoggedIn()
+        {
+            return View();
+        }
+
     }
 }

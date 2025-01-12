@@ -1,37 +1,44 @@
 ﻿@model PresentationLayer.Models.ProfileViewModel
 
-<h1>Welcome to Your Profile</h1>
-<p>Your username: @Model.Username</p>
+@{
+    ViewData["Title"] = $"{Model.Username}'s Profile";
+}
 
-<h2>Your Sleep Reviews</h2>
+<link rel="stylesheet" href="~/css/Home/Index.css" asp-append-version="true" />
 
-@if (Model.SleepReviews != null && Model.SleepReviews.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Sleep Rating</th>
-                <th>Description</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Duration</th>
-            </tr>
-        </thead>
-        <tbody>
+<h1>@Model.Username's Sleep Timeline</h1>
+
+<div class="text-center">
+    @if (Model.SleepReviews.Any())
+    {
+        <div>
             @foreach (var review in Model.SleepReviews)
             {
-                <tr>
-                    <td>@review.SleepRating</td>
-                    <td>@review.Description</td>
-                    <td>@review.StartTime.ToString("MM/dd/yyyy HH:mm")</td>
-                    <td>@review.EndTime.ToString("MM/dd/yyyy HH:mm")</td>
-                    <td>@review.SleepDuration</td>
-                </tr>
+                <div class="review-box">
+                    <p><strong>Reviewer:</strong> @review.Reviewer</p>
+                    <p><strong>Sleep Rating:</strong> @review.SleepRating</p>
+                    <p><strong>Description:</strong> @review.Description</p>
+                    <p><strong>Sleep Goal:</strong> @review.SleepGoal</p>
+                    <p><strong>Sleep Duration (minutes):</strong> @review.SleepDuration</p>
+                    <p><strong>Start Time:</strong> @review.StartTime</p>
+                    <p><strong>End Time:</strong> @review.EndTime</p>
+                    <p><strong>Date:</strong> @review.Date.ToString("yyyy-MM-dd")</p>
+
+                    @Html.ActionLink("Edit", "EditReview", "SleepReview", new { id = review.Id }, new { @class = "btn btn-primary" })
+
+                    <form asp-action="DeleteReview" asp-controller="SleepReview" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@review.Id" />
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this review?');">
+                            Delete
+                        </button>
+                    </form>
+
+                </div>
             }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No sleep reviews found.</p>
-}
+        </div>
+    }
+    else
+    {
+        <p>You have no sleep reviews yet.</p>
+    }
+</div>

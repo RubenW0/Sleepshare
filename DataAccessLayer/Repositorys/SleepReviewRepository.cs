@@ -142,9 +142,9 @@ namespace DataAccessLayer.Repositorys
                 try
                 {
 
-                        dbConn.Open();
-                        using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
-                        {
+                    dbConn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+                    {
                         cmd.Parameters.AddWithValue("@id", review.Id);
                         cmd.Parameters.AddWithValue("@sleep_rating", review.SleepRating);
                         cmd.Parameters.AddWithValue("@description", review.Description);
@@ -157,54 +157,82 @@ namespace DataAccessLayer.Repositorys
                         return cmd.ExecuteNonQuery() > 0;
                     }
                 }
-            
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while updating the sleep review.", ex);
-            }
-            finally
-            {
-                dbConn.Close();
-            }
+
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred while updating the sleep review.", ex);
+                }
+                finally
+                {
+                    dbConn.Close();
+                }
 
 
         }
 
         public bool AddSleepReview(SleepReviewDTO review)
-{
-    string query = @"INSERT INTO sleep_reviews (user_id, sleep_rating, description, sleep_goal,
+        {
+            string query = @"INSERT INTO sleep_reviews (user_id, sleep_rating, description, sleep_goal,
                                                 sleep_duration, start_time, end_time, date)
                      VALUES (@user_id, @sleep_rating, @description, @sleep_goal, 
                              @sleep_duration, @start_time, @end_time, @date)";
 
-    using (var dbConn = new MySqlConnection(_connectionString))
-    {
-        try
-        {
-            dbConn.Open();
-            using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+            using (var dbConn = new MySqlConnection(_connectionString))
             {
-                cmd.Parameters.AddWithValue("@user_id", review.UserId); 
-                cmd.Parameters.AddWithValue("@sleep_rating", review.SleepRating);
-                cmd.Parameters.AddWithValue("@description", review.Description);
-                cmd.Parameters.AddWithValue("@sleep_goal", review.SleepGoal);
-                cmd.Parameters.AddWithValue("@sleep_duration", review.SleepDuration);
-                cmd.Parameters.AddWithValue("@start_time", review.StartTime);
-                cmd.Parameters.AddWithValue("@end_time", review.EndTime);
-                cmd.Parameters.AddWithValue("@date", review.Date);
+                try
+                {
+                    dbConn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+                    {
+                        cmd.Parameters.AddWithValue("@user_id", review.UserId);
+                        cmd.Parameters.AddWithValue("@sleep_rating", review.SleepRating);
+                        cmd.Parameters.AddWithValue("@description", review.Description);
+                        cmd.Parameters.AddWithValue("@sleep_goal", review.SleepGoal);
+                        cmd.Parameters.AddWithValue("@sleep_duration", review.SleepDuration);
+                        cmd.Parameters.AddWithValue("@start_time", review.StartTime);
+                        cmd.Parameters.AddWithValue("@end_time", review.EndTime);
+                        cmd.Parameters.AddWithValue("@date", review.Date);
 
-                return cmd.ExecuteNonQuery() > 0;
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred while adding the sleep review.", ex);
+                }
+                finally
+                {
+                    dbConn.Close();
+                }
             }
         }
-        catch (Exception ex)
+
+        public bool DeleteSleepReview(int reviewId)
         {
-            throw new Exception("An error occurred while adding the sleep review.", ex);
+            string query = @"DELETE FROM sleep_reviews WHERE id = @id";
+
+            using (var dbConn = new MySqlConnection(_connectionString))
+            {
+                try
+                {
+                    dbConn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", reviewId);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred while deleting the sleep review.", ex);
+                }
+                finally
+                {
+                    dbConn.Close();
+                }
+            }
         }
-        finally
-        {
-            dbConn.Close();
-        }
-    }
-}
+
+
     }
 }

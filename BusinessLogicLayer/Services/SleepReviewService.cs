@@ -38,6 +38,11 @@ namespace BusinessLogicLayer.Services
             return _sleepReviewRepository.AddSleepReview(review);
         }
 
+        public bool DeleteSleepReview(int reviewId)
+        {
+            return _sleepReviewRepository.DeleteSleepReview(reviewId);
+        }
+
 
     }
 }
