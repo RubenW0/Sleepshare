@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.DTOs
 {
-    public class UserDTO
+    public class FollowerDTO
     {
         public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public bool IsFollowed { get; set; }
+        public int FollowsId { get; set; }
+        public string Username { get; set; } 
+
     }
 }

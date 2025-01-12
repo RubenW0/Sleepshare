@@ -19,14 +19,9 @@ namespace Sleepshare.Controllers
 
         public IActionResult Index()
         {
-            var sleepReviewDTOs = _sleepReviewService.GetAllSleepReviews();
-
-            var sleepReviews = sleepReviewDTOs
-                .Select(SleepReviewMapper.ToModel)
-                .ToList();
-
-            return View(sleepReviews);
+            return View();
         }
+
 
 
         public IActionResult Privacy()

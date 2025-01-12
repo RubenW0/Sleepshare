@@ -1,7 +1,4 @@
-﻿
-
-
-using BusinessLogicLayer.DTOs;
+﻿using BusinessLogicLayer.DTOs;
 using BusinessLogicLayer.Entitys;
 
 namespace BusinessLogicLayer.IRepositorys
@@ -14,6 +11,9 @@ namespace BusinessLogicLayer.IRepositorys
         List<SleepReviewDTO> GetSleepReviewsByUserId(int userId);
 
         bool DeleteSleepReview(int reviewId);
+
+        List<SleepReviewDTO> GetSleepReviewsByUserIds(List<int> userIds);
+
 
     }
 }

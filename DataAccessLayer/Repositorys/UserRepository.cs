@@ -36,7 +36,7 @@ namespace DataAccessLayer.Repositorys
                             {
                                 return new UserDTO
                                 {
-                                    Id = Convert.ToInt32(dataReader["id"]),
+                                    UserId = Convert.ToInt32(dataReader["id"]),
                                     Username = dataReader["username"].ToString(),
                                     Password = dataReader["password"].ToString()  
                                 };

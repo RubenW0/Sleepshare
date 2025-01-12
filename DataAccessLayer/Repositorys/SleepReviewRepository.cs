@@ -5,8 +5,6 @@ using MySql.Data.MySqlClient;
 
 namespace DataAccessLayer.Repositorys
 {
-
-
     public class SleepReviewRepository : ISleepReviewRepository
     {
         private readonly string _connectionString;
@@ -231,6 +229,65 @@ namespace DataAccessLayer.Repositorys
                     dbConn.Close();
                 }
             }
+        }
+
+        public List<SleepReviewDTO> GetSleepReviewsByUserIds(List<int> userIds)
+        {
+            if (userIds == null || userIds.Count == 0)
+                return new List<SleepReviewDTO>();
+
+            string query = @"SELECT sr.id, u.username, sr.sleep_rating, sr.description, sr.sleep_goal,
+                             sr.sleep_duration, sr.start_time, sr.end_time, sr.date, sr.user_id
+                      FROM sleep_reviews sr
+                      JOIN users u ON sr.user_id = u.id
+                      WHERE sr.user_id IN (" + string.Join(",", userIds.Select(id => $"@user_id{id}")) + ")";
+
+            List<SleepReviewDTO> sleepReviews = new List<SleepReviewDTO>();
+            using (var dbConn = new MySqlConnection(_connectionString))
+            {
+                try
+                {
+                    dbConn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, dbConn))
+                    {
+                        foreach (var id in userIds)
+                        {
+                            cmd.Parameters.AddWithValue($"@user_id{id}", id);
+                        }
+
+                        using (MySqlDataReader dataReader = cmd.ExecuteReader())
+                        {
+                            while (dataReader.Read())
+                            {
+                                var review = new SleepReviewDTO
+                                {
+                                    Id = Convert.ToInt32(dataReader["id"]),
+                                    Reviewer = dataReader["username"].ToString(),
+                                    SleepRating = Convert.ToInt32(dataReader["sleep_rating"]),
+                                    Description = dataReader["description"].ToString(),
+                                    SleepGoal = Convert.ToInt32(dataReader["sleep_goal"]),
+                                    SleepDuration = Convert.ToInt32(dataReader["sleep_duration"]),
+                                    StartTime = Convert.ToDateTime(dataReader["start_time"]),
+                                    EndTime = Convert.ToDateTime(dataReader["end_time"]),
+                                    Date = Convert.ToDateTime(dataReader["date"]).Date,
+                                    UserId = Convert.ToInt32(dataReader["user_id"])
+                                };
+                                sleepReviews.Add(review);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("An error occurred while retrieving sleep reviews by user IDs.", ex);
+                }
+                finally
+                {
+                    dbConn.Close();
+                }
+            }
+
+            return sleepReviews;
         }
 
 

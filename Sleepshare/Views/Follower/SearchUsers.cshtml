@@ -1,0 +1,38 @@
+﻿@model List<BusinessLogicLayer.DTOs.UserDTO>
+
+@{
+    ViewData["Title"] = "Follower users";
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>
+                    @if (ViewBag.FollowedUserIds != null && ViewBag.FollowedUserIds.Contains(user.UserId))
+                    {
+                        <form method="post" asp-action="Unfollow" asp-controller="Follower">
+                            <input type="hidden" name="followsId" value="@user.UserId" />
+                            <button type="submit">Unfollow</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-action="Follow" asp-controller="Follower">
+                            <input type="hidden" name="followsId" value="@user.UserId" />
+                            <button type="submit">Follow</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

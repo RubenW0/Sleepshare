@@ -11,11 +11,35 @@ using Sleepshare.Models;
 public class SleepReviewController : Controller
 {
     private readonly SleepReviewService _sleepReviewService;
+    private readonly FollowerService _followerService;
 
 
     public SleepReviewController(IConfiguration configuration)  
     {
         _sleepReviewService = new SleepReviewService(new SleepReviewRepository(configuration));
+        _followerService = new FollowerService(new FollowerRepository(configuration));
+    }
+
+    public IActionResult SleepFeed()
+    {
+        var userId = HttpContext.Session.GetInt32("UserId");
+        if (userId == null)
+        {
+            return RedirectToAction("Index", "Login");
+        }
+
+        // Get the list of followed user IDs
+        var followedUserIds = _followerService.GetFollowedUserIds(userId.Value);
+
+        // Fetch sleep reviews of followed users
+        var sleepReviewDTOs = _sleepReviewService.GetSleepReviewsByFollowedUsers(followedUserIds);
+
+        // Map DTOs to models
+        var sleepReviews = sleepReviewDTOs
+            .Select(SleepReviewMapper.ToModel)
+            .ToList();
+
+        return View(sleepReviews);
     }
 
     public IActionResult EditReview(int id)

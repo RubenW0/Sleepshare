@@ -32,7 +32,7 @@ namespace PresentationLayer.Controllers
                 if (foundUser != null)
                 {
                     HttpContext.Session.SetString("Username", foundUser.Username);
-                    HttpContext.Session.SetInt32("UserId", foundUser.Id);
+                    HttpContext.Session.SetInt32("UserId", foundUser.UserId);
 
                     return RedirectToAction("Profile", "Login"); 
                 }

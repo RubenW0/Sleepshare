@@ -43,6 +43,11 @@ namespace BusinessLogicLayer.Services
             return _sleepReviewRepository.DeleteSleepReview(reviewId);
         }
 
+        public List<SleepReviewDTO> GetSleepReviewsByFollowedUsers(List<int> followedUserIds)
+        {
+            return _sleepReviewRepository.GetSleepReviewsByUserIds(followedUserIds);
+        }
+
 
     }
 }
