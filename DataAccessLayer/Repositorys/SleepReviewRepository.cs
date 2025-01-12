@@ -237,10 +237,11 @@ namespace DataAccessLayer.Repositorys
                 return new List<SleepReviewDTO>();
 
             string query = @"SELECT sr.id, u.username, sr.sleep_rating, sr.description, sr.sleep_goal,
-                             sr.sleep_duration, sr.start_time, sr.end_time, sr.date, sr.user_id
-                      FROM sleep_reviews sr
-                      JOIN users u ON sr.user_id = u.id
-                      WHERE sr.user_id IN (" + string.Join(",", userIds.Select(id => $"@user_id{id}")) + ")";
+                     sr.sleep_duration, sr.start_time, sr.end_time, sr.date, sr.user_id
+                  FROM sleep_reviews sr
+                  JOIN users u ON sr.user_id = u.id
+                  WHERE sr.user_id IN (" + string.Join(",", userIds.Select(id => $"@user_id{id}")) + @")
+                  ORDER BY sr.date DESC"; 
 
             List<SleepReviewDTO> sleepReviews = new List<SleepReviewDTO>();
             using (var dbConn = new MySqlConnection(_connectionString))
@@ -289,6 +290,7 @@ namespace DataAccessLayer.Repositorys
 
             return sleepReviews;
         }
+
 
 
     }

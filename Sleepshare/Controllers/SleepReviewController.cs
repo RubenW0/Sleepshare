@@ -28,13 +28,10 @@ public class SleepReviewController : Controller
             return RedirectToAction("Index", "Login");
         }
 
-        // Get the list of followed user IDs
         var followedUserIds = _followerService.GetFollowedUserIds(userId.Value);
 
-        // Fetch sleep reviews of followed users
         var sleepReviewDTOs = _sleepReviewService.GetSleepReviewsByFollowedUsers(followedUserIds);
 
-        // Map DTOs to models
         var sleepReviews = sleepReviewDTOs
             .Select(SleepReviewMapper.ToModel)
             .ToList();
