@@ -9,16 +9,74 @@
         @foreach (var review in Model)
         {
             <div class="review-box">
-                <p><strong>Reviewer:</strong> @review.Reviewer</p>
-                <p><strong>Sleep Rating:</strong> @review.SleepRating</p>
-                <p><strong>Description:</strong> @review.Description</p>
-                <p><strong>Sleep Goal:</strong> @review.SleepGoal</p>
-                <p><strong>Sleep Duration (minutes):</strong> @review.SleepDuration</p>
-                <p><strong>Start Time:</strong> @review.StartTime</p>
-                <p><strong>End Time:</strong> @review.EndTime</p>
-                <p><strong>Date:</strong> @review.Date.ToString("yyyy-MM-dd")</p>
+                <div class="review-header">
+                    <div class="review-username">
+                        <p><strong>@review.Reviewer</strong></p>
+                    </div>
+                    <div class="sleep-rating">
+                        <p>@review.SleepRating / 10</p>
+                        <p class="rating-text">Rating</p>
+                    </div>
+                </div>
 
+                <div class="review-details">
+                    <p>@review.Description</p>
+                    <p>&nbsp;</p> 
+                    <p><strong>Sleep Goal:</strong> @review.SleepGoal</p>
+                    <p><strong>Sleep Duration:</strong> @review.SleepDuration minutes</p>
+@*                     <p><strong>Start Time:</strong> @review.StartTime</p>
+                    <p><strong>End Time:</strong> @review.EndTime</p> *@
+                    <p><strong>Date:</strong> @review.Date.ToString("yyyy-MM-dd")</p>
+                </div>
             </div>
         }
     </div>
 </div>
+
+<style>
+    .review-box {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .review-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .review-username {
+        font-size: 24px;
+        font-weight: bold;
+        margin-right: 20px;
+    }
+
+    .sleep-rating {
+        display: inline-block;
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        width: 80px;
+    }
+
+        .sleep-rating p {
+            margin: 0;
+        }
+
+    .rating-text {
+        font-size: 12px;
+        color: #777;
+    }
+
+    .review-details p {
+        margin: 5px 0;
+    }
+
+    .review-details strong {
+        font-weight: bold;
+    }
+</style>

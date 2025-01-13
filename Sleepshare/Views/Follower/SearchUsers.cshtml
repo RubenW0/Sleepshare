@@ -1,38 +1,123 @@
 ﻿@model List<BusinessLogicLayer.DTOs.UserDTO>
 
 @{
-    ViewData["Title"] = "Follower users";
+    ViewData["Title"] = "Follower Users";
 }
 
-<table>
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
+<div class="container">
+    <div class="header">
+        <a asp-controller="Login" asp-action="Profile" class="back-button">Back to Profile</a>
+        <h1>Follower Users</h1>
+    </div>
+
+    <table class="user-table">
+        <thead>
             <tr>
-                <td>@user.Username</td>
-                <td>
-                    @if (ViewBag.FollowedUserIds != null && ViewBag.FollowedUserIds.Contains(user.UserId))
-                    {
-                        <form method="post" asp-action="Unfollow" asp-controller="Follower">
-                            <input type="hidden" name="followsId" value="@user.UserId" />
-                            <button type="submit">Unfollow</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <form method="post" asp-action="Follow" asp-controller="Follower">
-                            <input type="hidden" name="followsId" value="@user.UserId" />
-                            <button type="submit">Follow</button>
-                        </form>
-                    }
-                </td>
+                <th>Username</th>
+                <th>Following</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>
+                        @if (ViewBag.FollowedUserIds != null && ViewBag.FollowedUserIds.Contains(user.UserId))
+                        {
+                            <form method="post" asp-action="Unfollow" asp-controller="Follower" class="action-form">
+                                <input type="hidden" name="followsId" value="@user.UserId" />
+                                <button type="submit" class="unfollow-button">Unfollow</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-action="Follow" asp-controller="Follower" class="action-form">
+                                <input type="hidden" name="followsId" value="@user.UserId" />
+                                <button type="submit" class="follow-button">Follow</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .back-button {
+        text-decoration: none;
+        color: #333;
+        background-color: #f9f9f9;
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .back-button:hover {
+            background-color: #e6e6e6;
+            color: #000;
         }
-    </tbody>
-</table>
+
+    h1 {
+        font-size: 24px;
+        color: #333;
+        margin: 0;
+    }
+
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .user-table thead {
+            background-color: #f0f0f0;
+        }
+
+        .user-table th, .user-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .user-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+    .action-form {
+        margin: 0;
+    }
+
+    .follow-button, .unfollow-button {
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        color: #333;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        .follow-button:hover, .unfollow-button:hover {
+            background-color: #e6e6e6;
+            color: #000;
+        }
+</style>
