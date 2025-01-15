@@ -104,7 +104,7 @@ public class SleepReviewController : Controller
 
         if (isAdded)
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("SleepFeed", "SleepReview");
         }
         else
         {

@@ -14,11 +14,27 @@ namespace BusinessLogicLayer.Services
 
         public void FollowUser(int userId, int followsId)
         {
+            // Validatie: Controleer of de gebruiker zichzelf probeert te volgen
+            //if (userId == followsId)
+            //{
+            //    throw new InvalidOperationException("Je kunt jezelf niet volgen.");
+            //}
+
+            if (_followerRepository.IsFollowing(userId, followsId))
+            {
+                throw new InvalidOperationException("Je volgt deze gebruiker al.");
+            }
+
             _followerRepository.FollowUser(userId, followsId);
         }
 
         public void UnfollowUser(int userId, int followsId)
         {
+            if (!_followerRepository.IsFollowing(userId, followsId))
+            {
+                throw new InvalidOperationException("Je volgt deze gebruiker niet.");
+            }
+
             _followerRepository.UnfollowUser(userId, followsId);
         }
 
@@ -41,6 +57,5 @@ namespace BusinessLogicLayer.Services
         {
             return _followerRepository.IsFollowing(userId, followsId);
         }
-
     }
 }
