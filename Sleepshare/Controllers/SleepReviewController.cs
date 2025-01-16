@@ -13,11 +13,11 @@ public class SleepReviewController : Controller
     private readonly SleepReviewService _sleepReviewService;
     private readonly FollowerService _followerService;
 
-
-    public SleepReviewController(IConfiguration configuration)  
+    // Gebruik Dependency Injection voor de services
+    public SleepReviewController(SleepReviewService sleepReviewService, FollowerService followerService)
     {
-        _sleepReviewService = new SleepReviewService(new SleepReviewRepository(configuration));
-        _followerService = new FollowerService(new FollowerRepository(configuration));
+        _sleepReviewService = sleepReviewService;
+        _followerService = followerService;
     }
 
     public IActionResult SleepFeed()

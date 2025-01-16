@@ -10,9 +10,9 @@ namespace PresentationLayer.Controllers
 
         private readonly FollowerService _followerService;
 
-        public FollowerController(IConfiguration configuration)
+        public FollowerController(FollowerService followerService)
         {
-            _followerService = new FollowerService(new FollowerRepository(configuration));
+            _followerService = followerService;
         }
 
         [HttpGet]

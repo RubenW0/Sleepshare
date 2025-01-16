@@ -10,9 +10,9 @@ namespace PresentationLayer.Controllers
     {
         private readonly UserService _userService;
 
-        public LoginController(IConfiguration configuration)
+        public LoginController(UserService userService)
         {
-            _userService = new UserService(new UserRepository(configuration));
+            _userService = userService;
         }
 
         [HttpGet]

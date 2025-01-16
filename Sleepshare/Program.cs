@@ -1,33 +1,27 @@
 using BusinessLogicLayer.IRepositorys;
-using DataAccessLayer.Repositorys;
 using BusinessLogicLayer.Services;
-using Microsoft.Extensions.Configuration;
 using DataAccessLayer;
+using DataAccessLayer.Repositorys;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Voeg appsettings.json toe
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+// Voeg IConfiguration toe aan de DI-container
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
-// Configureer andere services (bijv. repositories)
+// Voeg AppConfiguration toe aan de DI-container
+builder.Services.AddSingleton<AppConfiguration>();
+
+// Configureer repositories en services
 builder.Services.AddScoped<ISleepReviewRepository, SleepReviewRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-// configureer services
-//builder.Services.AddSingleton<AppConfiguration>();
-//builder.Services.AddScoped<ISleepReviewRepository, SleepReviewRepository>();
-//builder.Services.AddScoped<SleepReviewService, SleepReviewService>();
-
-
-
-var configuration = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json")
-        .Build();
-
-builder.Services.AddSingleton(configuration);
-builder.Services.AddSingleton<AppConfiguration>();
+builder.Services.AddScoped<IFollowerRepository, FollowerRepository>();
+builder.Services.AddScoped<SleepReviewService>();
+builder.Services.AddScoped<FollowerService>();
+builder.Services.AddScoped<UserService>(); 
 
 
 // Add services to the container.
@@ -56,4 +50,3 @@ app.MapControllerRoute(
     pattern: "{controller=SleepReview}/{action=SleepFeed}/{id?}");
 
 app.Run();
-

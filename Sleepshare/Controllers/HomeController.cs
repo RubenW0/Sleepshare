@@ -12,9 +12,9 @@ namespace Sleepshare.Controllers
     {
         private readonly SleepReviewService _sleepReviewService;
 
-        public HomeController(IConfiguration configuration)
+        public HomeController(SleepReviewService sleepReviewService)
         {
-            _sleepReviewService = new SleepReviewService(new SleepReviewRepository(configuration));
+            _sleepReviewService = sleepReviewService;
         }
 
         public IActionResult Index()
