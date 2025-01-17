@@ -24,10 +24,10 @@ namespace PresentationLayer.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
-            var users = _followerService.GetAllUsers(); 
-            var followedUserIds = _followerService.GetFollowedUserIds(userId.Value); 
+            var users = _followerService.GetAllUsers(userId.Value);
+            var followedUserIds = _followerService.GetFollowedUserIds(userId.Value);
 
-            ViewBag.FollowedUserIds = followedUserIds; 
+            ViewBag.FollowedUserIds = followedUserIds;
             return View(users);
         }
 

@@ -15,10 +15,10 @@ namespace BusinessLogicLayer.Services
         public void FollowUser(int userId, int followsId)
         {
             // Validatie: Controleer of de gebruiker zichzelf probeert te volgen
-            //if (userId == followsId)
-            //{
-            //    throw new InvalidOperationException("Je kunt jezelf niet volgen.");
-            //}
+            if (userId == followsId)
+            {
+                throw new InvalidOperationException("Je kunt jezelf niet volgen.");
+            }
 
             if (_followerRepository.IsFollowing(userId, followsId))
             {
@@ -48,9 +48,10 @@ namespace BusinessLogicLayer.Services
             return _followerRepository.GetFollowedUserIds(userId);
         }
 
-        public List<UserDTO> GetAllUsers()
+        public List<UserDTO> GetAllUsers(int userId)
         {
-            return _followerRepository.GetAllUsers();
+            var allUsers = _followerRepository.GetAllUsers();
+            return allUsers.Where(user => user.UserId != userId).ToList();
         }
 
         public bool IsFollowing(int userId, int followsId)

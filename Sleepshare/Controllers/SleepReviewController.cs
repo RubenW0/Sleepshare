@@ -29,6 +29,7 @@ public class SleepReviewController : Controller
         }
 
         var followedUserIds = _followerService.GetFollowedUserIds(userId.Value);
+        followedUserIds.Add(userId.Value); // Voeg de eigen userId toe aan de lijst
 
         var sleepReviewDTOs = _sleepReviewService.GetSleepReviewsByFollowedUsers(followedUserIds);
 
@@ -57,8 +58,6 @@ public class SleepReviewController : Controller
     [HttpPost]
     public IActionResult EditReview(SleepReview sleepReview)
     {
-        //if (ModelState.IsValid)
-        //{
         // Gebruik SleepReviewMapper om het model om te zetten naar een DTO
         var sleepReviewDTO = SleepReviewMapper.ToDTO(sleepReview);
 
@@ -68,7 +67,6 @@ public class SleepReviewController : Controller
         {
             return RedirectToAction("Profile", "Login");
         }
-        //}
 
         return View(sleepReview);
     }

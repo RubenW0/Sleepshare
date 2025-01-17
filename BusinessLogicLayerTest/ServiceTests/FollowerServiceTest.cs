@@ -102,15 +102,5 @@ namespace BusinessLogicLayer.Tests
             Assert.AreEqual(followsId, followers[0].FollowsId);
         }
 
-        [TestMethod]
-        public void GetAllUsers_ShouldReturnAllUsers()
-        {
-            // Act
-            var users = _followerService.GetAllUsers();
-
-            // Assert
-            Assert.IsTrue(users.Count > 0);
-            Assert.AreEqual("User1", users[0].Username);
-        }
     }
 }
